@@ -1,4 +1,9 @@
-script(type="text/javascript",src="panel.js")
-link(type="text/css",rel="stylesheet",href="panel.css")
-script(type="text/kulor-template",id="panelContainerTemplate")
-	h3 {{panelName}}
+link( type="text/css" , rel="stylesheet" , href="panel.css" )
+script( type="text/javascript" , src="panel.js" )
+
+script( type="text/kulor-template" , id="uiSub-panel-container" )
+    div(class="uiSub-panel-container-pos-center uiSub-hidden uiSub-panel-theme-{{theme}}")
+        .uiSub-panel-container-pos-center-left-fixed
+
+script( type="text/kulor-template" , id="uiSub-panel-coverBy" )
+    .uiSub-panel-coverBy.uiSub-hidden

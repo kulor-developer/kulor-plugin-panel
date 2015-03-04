@@ -1,5 +1,5 @@
 {
-  "name": "kulor-panel",
+  "name": "kulor-plugin-panel",
   "version": "0.0.1",
   "description": "panel",
   "main": "index.jade",
@@ -7,8 +7,12 @@
     "kulor-panel"
   ],
   "authors": [
-    "bo.cheng"
+    "bo.cheng <chen8114@sina.com>"
   ],
+  "repository"  : {
+    "type"    : "git" ,
+    "url"     : "git@github.com:nihaox1/kulor-plugin-panel.git"
+  } ,
   "license": "MIT",
   "homepage": "https://github.com/nihaox1/kulor"
 }
