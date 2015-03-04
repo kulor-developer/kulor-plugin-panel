@@ -1,0 +1,14 @@
+{
+  "name": "kulor-panel",
+  "version": "0.0.1",
+  "description": "panel",
+  "main": "index.jade",
+  "keywords": [
+    "kulor-panel"
+  ],
+  "authors": [
+    "bo.cheng"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nihaox1/kulor"
+}
