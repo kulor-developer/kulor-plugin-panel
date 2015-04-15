@@ -1,7 +1,8 @@
 define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
-    var Panel = Base.extend( function( templateId , jsonInfo , $parentContainer ){
+    var Panel = Base.extend( function( templateId , jsonInfo , $parentContainer , opts ){
+        this._panelConfig       = $.extend( {} , this.__panelConfig.uiConfig , opts );
         this.$parentContainer   = $parentContainer || $( document.body );
-        this.$container         = $( this.getTemplate( this.__panelConfig.uiConfig , this.__panelConfig.containerTemplateId ) );
+        this.$container         = $( this.getTemplate( this._panelConfig , this.__panelConfig.containerTemplateId ) );
         this.$content           = this.$container.find( ".uiSub-panel-container-pos-center-left-fixed" );
         this.$modal             = false;
         this.$coverBy           = false;
@@ -57,13 +58,19 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
                 this.__panelConfig.zIndex++;
                 this.$coverBy.removeClass( "uiSub-hidden" );
                 this._panelStatus.display = true;
+                this.$coverBy.height( $( document ).height() );
             }          
             return this;
         } ,
-        hidePanel      : function(){
+        /*!
+         *  隐藏Panel
+         *  alwaysHide  {boolean}   
+         */
+        hidePanel      : function( alwaysHide ){
             if ( this._panelStatus.display ) {
                 this.$container.addClass( "uiSub-hidden" );
-                if( this.$parentContainer.children( ".uiSub-panel-container-pos-center" ).length == this.$parentContainer.children( ".uiSub-panel-container-pos-center.uiSub-hidden" ).length ){
+                this.$coverBy.addClass( "uiSub-hidden" );
+                if( alwaysHide || this.$parentContainer.children( ".uiSub-panel-container-pos-center" ).length == this.$parentContainer.children( ".uiSub-panel-container-pos-center.uiSub-hidden" ).length ){
                     this.$coverBy.addClass( "uiSub-hidden" );
                 }
                 this._panelStatus.display = false;
