@@ -1,6 +1,6 @@
 {
   "name": "kulor-plugin-panel",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "panel",
   "main": "index.jade",
   "keywords": [
