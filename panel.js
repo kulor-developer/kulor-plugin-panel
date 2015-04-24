@@ -1,36 +1,93 @@
 define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
-    var Panel = Base.extend( function( templateId , jsonInfo , $parentContainer , opts ){
-        this._panelConfig       = $.extend( {} , this.__panelConfig.uiConfig , opts );
-        this.$parentContainer   = $parentContainer || $( document.body );
-        this.$container         = $( this.getTemplate( this._panelConfig , this.__panelConfig.containerTemplateId ) );
-        this.$content           = this.$container.find( ".uiSub-panel-container-pos-center-left-fixed" );
-        this.$modal             = false;
-        this.$coverBy           = false;
-        this._panelStatus       = {
-            display     : false
-        }
-        this.InitCoverByModal();
-        this.$parentContainer.append( this.$container );
-        if( templateId ){
-            this.showPanel( templateId , jsonInfo );
-        }
-    } , {
-        extend          : Template ,
-        __panelConfig        : {
-            containerTemplateId     : "uiSub-panel-container" ,
-            coverByTemplateId       : "uiSub-panel-coverBy" ,
-            zIndex                  : 199 ,
-            parentContainer         : {} ,
-            panelItems              : [],
-            uiConfig                : {
-                theme           : "default"
+    var tool ,
+        Panel = Base.extend( function( templateId , jsonInfo , $parentContainer , opts ){
+            this._panelConfig       = $.extend( {} , this.__panelConfig.uiConfig , opts );
+            this.$parentContainer   = $parentContainer || $( document.body );
+            this.$container         = $( this.getTemplate( this._panelConfig , this.__panelConfig.containerTemplateId ) );
+            this.$content           = this.$container.find( ".uiSub-panel-container-pos-center-left-fixed" );
+            this.$modal             = false;
+            this.$coverBy           = false;
+            this._panelStatus       = {
+                display     : false
             }
-        } ,
-        setPanelConfig : function( uiConfig ){
-            this.__panelConfig.uiConfig = $.extend( this.__panelConfig.uiConfig , uiConfig );
-            this.$container.addClass( "uiSub-panel-theme-" + this.__panelConfig.uiConfig.theme );
+            tool.InitCoverByModal.call( this );
+            this.$parentContainer.append( this.$container );
+            if( templateId ){
+                this.showPanel( templateId , jsonInfo );
+            }
+        } , {
+            extend          : Template ,
+            __panelConfig        : {
+                containerTemplateId     : "uiSub-panel-container" ,
+                coverByTemplateId       : "uiSub-panel-coverBy" ,
+                zIndex                  : 199 ,
+                parentContainer         : {} ,
+                panelItems              : [],
+                uiConfig                : {
+                    theme           : "default"
+                }
+            } ,
+            show        : function(){
+                return this.showPanel.apply( this , arguments );
+            } ,
+            hide        : function(){
+               return this.hidePanel.apply( this , arguments ); 
+            } ,
+            setPanelConfig : function( uiConfig ){
+                this.__panelConfig.uiConfig = $.extend( this.__panelConfig.uiConfig , uiConfig );
+                this.$container.addClass( "uiSub-panel-theme-" + this.__panelConfig.uiConfig.theme );
+                return this;
+            },
+            showPanel    : function( id , jsonInfo ){
+                if ( id ) {
+                    this.$content.html( this.getTemplate( jsonInfo || id , jsonInfo ? id : false  ) );
+                    this.$modal     = this.$content.children();
+                }
+                if ( !this._panelStatus.display ) {
+                    this.$container.removeClass( "uiSub-hidden" );
+                    this.__panelConfig.zIndex++;
+                    this.$coverBy.removeClass( "uiSub-hidden" );
+                    this._panelStatus.display = true;
+                    this.$coverBy.height( $( document ).height() );
+                    if( this._panelConfig.topCenter ){
+                        tool.panelMoveTopForCenter.call( this );
+                    }
+                }          
+                return this;
+            } ,
+            /*!
+             *  隐藏Panel
+             *  alwaysHide  {boolean}   
+             */
+            hidePanel      : function( alwaysHide ){
+                if ( this._panelStatus.display ) {
+                    this.$container.addClass( "uiSub-hidden" );
+                    this.$coverBy.addClass( "uiSub-hidden" );
+                    if( alwaysHide || this.$parentContainer.children( ".uiSub-panel-container-pos-center" ).length == this.$parentContainer.children( ".uiSub-panel-container-pos-center.uiSub-hidden" ).length ){
+                        this.$coverBy.addClass( "uiSub-hidden" );
+                    }
+                    this._panelStatus.display = false;
+                }
+                return this;
+            } ,
+            deletePanel     : function(){
+                this.hidePanel();
+                this.$container.remove();
+                this.$content = null;
+                for( var a in this ){
+                    delete this[ a ];
+                }
+                return this;
+            }
+        } );
+    tool    = {
+        panelMoveTopForCenter   : function(){
+            var _top    = ( this._panelConfig.topCenter == "fix" ? 0 : $( document.body ).scrollTop() ) + ( window.screen.availHeight - this.$container.height() ) / 2 - 50;
+            this.$container.css( {
+                top         : _top  < 50 ? 50 : _top
+            } );
             return this;
-        },
+        } ,
         /*!
          *  构建一个panel遮罩层
          */
@@ -47,45 +104,8 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
                     } );
                 this.$coverBy.height( this.$parentContainer.height() );
             }
-        },
-        showPanel    : function( id , jsonInfo ){
-            if ( id ) {
-                this.$content.html( this.getTemplate( jsonInfo || id , jsonInfo ? id : false  ) );
-                this.$modal     = this.$content.children();
-            }
-            if ( !this._panelStatus.display ) {
-                this.$container.removeClass( "uiSub-hidden" );
-                this.__panelConfig.zIndex++;
-                this.$coverBy.removeClass( "uiSub-hidden" );
-                this._panelStatus.display = true;
-                this.$coverBy.height( $( document ).height() );
-            }          
-            return this;
-        } ,
-        /*!
-         *  隐藏Panel
-         *  alwaysHide  {boolean}   
-         */
-        hidePanel      : function( alwaysHide ){
-            if ( this._panelStatus.display ) {
-                this.$container.addClass( "uiSub-hidden" );
-                this.$coverBy.addClass( "uiSub-hidden" );
-                if( alwaysHide || this.$parentContainer.children( ".uiSub-panel-container-pos-center" ).length == this.$parentContainer.children( ".uiSub-panel-container-pos-center.uiSub-hidden" ).length ){
-                    this.$coverBy.addClass( "uiSub-hidden" );
-                }
-                this._panelStatus.display = false;
-            }
-            return this;
-        } ,
-        deletePanel     : function(){
-            this.hidePanel();
-            this.$container.remove();
-            this.$content = null;
-            for( var a in this ){
-                delete this[ a ];
-            }
             return this;
         }
-    } );
+    };
     return Panel;
 } );
