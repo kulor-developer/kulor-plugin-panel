@@ -1,6 +1,6 @@
 {
   "name": "kulor-plugin-panel",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "panel",
   "main": "index.jade",
   "keywords": [
@@ -12,6 +12,10 @@
   "repository"  : {
     "type"    : "git" ,
     "url"     : "git@github.com:nihaox1/kulor-plugin-panel.git"
+  } ,
+  "kulor"     : {
+    "requireName"   : "panel" ,
+    "jsFileName"    : "panel.js"
   } ,
   "license": "MIT",
   "homepage": "https://github.com/nihaox1/kulor"
