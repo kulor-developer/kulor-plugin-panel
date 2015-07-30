@@ -44,9 +44,11 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
                     this.$modal     = this.$content.children();
                 }
                 if ( !this._panelStatus.display ) {
-                    this.$container.removeClass( "uiSub-hidden" );
                     this.__panelConfig.zIndex++;
-                    this.$coverBy.removeClass( "uiSub-hidden" );
+                    this.$coverBy.removeClass( "uiSub-hidden" )
+                        .css( { zIndex : this.__panelConfig.zIndex } );
+                    this.$container.removeClass( "uiSub-hidden" )
+                        .css( { zIndex : this.__panelConfig.zIndex } );
                     this._panelStatus.display = true;
                     this.$coverBy.height( $( document ).height() );
                     if( this._panelConfig.topCenter ){
