@@ -11,7 +11,7 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
                 display     : false
             }
             tool.InitCoverByModal.call( this );
-            this.$parentContainer.append( this.$container );
+            this.$parentContainer.append( tool.setPanelStyle.call( this ) );
             if( templateId ){
                 this.showPanel( templateId , jsonInfo );
             }
@@ -83,6 +83,17 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
             }
         } );
     tool    = {
+        /*!
+         *  设置panel的一些通配属性，目前只支持width
+         */
+        setPanelStyle           : function(){
+            var _cssHash    = [ "width" ] ,
+                _css        = {};
+            for( var i = _cssHash.length; i--; ){
+                _css[ _cssHash[ i ] ]   = this._panelConfig[ _cssHash[ i ] ];
+            }
+            return this.$container.css( _css );
+        } ,
         panelMoveTopForCenter   : function(){
             var _top    = ( this._panelConfig.topCenter == "fix" ? 0 : $( document.body ).scrollTop() ) + ( window.screen.availHeight - this.$container.height() ) / 2 - 50;
             this.$container.css( {
