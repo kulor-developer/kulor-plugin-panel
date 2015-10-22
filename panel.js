@@ -12,6 +12,9 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
             }
             tool.InitCoverByModal.call( this );
             this.$parentContainer.append( tool.setPanelStyle.call( this ) );
+            if( tool.checkSupportCss3.call( this ) ){
+                this.$container.addClass( "uiSub-panel-is-css3" );
+            };
             if( templateId ){
                 this.showPanel( templateId , jsonInfo );
             }
@@ -93,6 +96,21 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
                 _css[ _cssHash[ i ] ]   = this._panelConfig[ _cssHash[ i ] ];
             }
             return this.$container.css( _css );
+        } ,
+        checkSupportCss3        : function(){
+            var _prefix     = [ "webkit" , "Moz" , "ms" , "o" ] , 
+                _style      = document.body.style ,
+                _key;
+            if( "transform" in _style ){
+                return true;
+            }
+            for( var i = _prefix.length; i--; ){
+                _key    = _prefix[ i ] + "-" + "transform";
+                if( _key in _style ){
+                    return true;
+                }
+            }
+            return false;
         } ,
         panelMoveTopForCenter   : function(){
             var _top    = ( this._panelConfig.topCenter == "fix" ? 0 : $( document.body ).scrollTop() ) + ( window.screen.availHeight - this.$container.height() ) / 2 - 50;

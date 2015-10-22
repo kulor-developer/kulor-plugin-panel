@@ -1,3 +1,18 @@
+.transform( ... ) {
+    -webkit-transform    : @arguments;
+    -moz-transform       : @arguments;
+    -o-transform         : @arguments;
+    -ms-transform        : @arguments;
+    transform            : @arguments;
+}
+
+.opacity( @factor ) {
+    @iefactor   : @factor * 100;
+    -ms-filter  : "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{iefactor})";
+    filter      : ~"alpha(opacity=@{iefactor})";
+    opacity     : @factor;
+}
+
 .uiSub-hidden {
     display     : none;
 }
@@ -9,20 +24,23 @@
     left        : 0;
     position    : absolute;
     background  : #333;
-    opacity     : .25;  
+    .opacity( .75 );  
 }
 
 .uiSub-panel-container-pos-center {
     position    : absolute;
     left        : 50%;
     top         : 100px;  
+    &.uiSub-panel-is-css3 {
+        top     : 50%;
+        .transform( translateY(-50%) );
+    }
     &.display {
         display     : block; 
     }
     .uiSub-panel-container-pos-center-left-fixed {
         width           : 100%;
         margin-left     : -50%;
-        background      : #fff;
     }
     &.uiSub-panel-theme-none {
         .uiSub-panel-container-pos-center-left-fixed {
