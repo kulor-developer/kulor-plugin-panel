@@ -86,14 +86,13 @@ define( "Panel" , [ "Base" , "Template" ] , function( Base , Template ){
             }
         } );
     tool    = {
-        /*!
-         *  设置panel的一些通配属性，目前只支持width
-         */
         setPanelStyle           : function(){
-            var _cssHash    = [ "width" ] ,
-                _css        = {};
-            for( var i = _cssHash.length; i--; ){
-                _css[ _cssHash[ i ] ]   = this._panelConfig[ _cssHash[ i ] ];
+            var _css        = {} ,
+                _style      = document.body.style;
+            for( var a in this._panelConfig ){
+                if( _style[ a ] !== undefined ) {
+                    _css[ a ]   = this._panelConfig[ a ];
+                }
             }
             return this.$container.css( _css );
         } ,
